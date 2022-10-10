@@ -1,6 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
 
-// 取随机数
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
@@ -58,7 +57,12 @@ module.exports = defineConfig({
       alias: {
         '@': path.resolve('src'),
         'cesium': path.resolve(__dirname, cesiumSource)
-      }
+      },
+      fallback: {
+        http: require.resolve("stream-http"),
+        https: require.resolve("stream-http"),
+        zlib: require.resolve('browserify-zlib'),
+      },
     },
     plugins: [
       new CopyWebpackPlugin({

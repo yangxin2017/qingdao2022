@@ -14,3 +14,10 @@ npm run dev
 ```
 npm run build
 ```
+
+### 安装使用cnpm
+```
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+部分报错使用cnpm install安装对应依赖即可
+http、https、stream等在vue.config.js中配置
+```

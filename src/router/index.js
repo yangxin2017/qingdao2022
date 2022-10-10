@@ -24,6 +24,30 @@ const routes = [
     }
   },
   {
+    path: "/urban/monitor",
+    name: "urban-monitor",
+    component: () => import('../views/qd/urban/monitor/monitor.vue'),
+    meta: {
+      title: '城市群运行监测-运行监测'
+    }
+  },
+  {
+    path: "/urban/urban",
+    name: "urban-urban",
+    component: () => import('../views/qd/urban/urban/analysis.vue'),
+    meta: {
+      title: '城市群运行监测-城市分析'
+    }
+  },
+  {
+    path: "/urban/mode",
+    name: "urban-mode",
+    component: () => import('../views/qd/urban/mode/analysis.vue'),
+    meta: {
+      title: '城市群运行监测-城际交通方式分析'
+    }
+  },
+  {
     path: '/city/home',
     name: 'city-home',
     component: () => import('../views/qd/city/home.vue'),
