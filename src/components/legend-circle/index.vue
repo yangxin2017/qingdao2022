@@ -32,13 +32,13 @@
 export default {
   props: {
     legend: {
-      type: Object,
+      type: Array,
       default: () => {
         return [];
       },
     },
     iconLegend: {
-      type: Object,
+      type: Array,
       default: () => {
         return [];
       },

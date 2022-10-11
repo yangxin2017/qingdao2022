@@ -1,30 +1,223 @@
 <template>
   <div class="app-container">
-    <div
-      class="left-container animated"
-      :class="{ fadeOutLeft: !showPanel, fadeInLeft: showPanel }"
-    >
-      <sq-card height="18%" :title="'基本信息'">
-        <div class="fk-lists">
-          <sq-v-icon-text
-            class="fk"
-            v-for="item in ydDatas"
-            :key="item.id"
-            :title="item.title"
-            :data="item.data"
-          ></sq-v-icon-text>
-        </div>
-      </sq-card>
-
-      <sq-card height="30%" class="sep" :title="'视频监控'"> </sq-card>
+    <div class="bottom-tab-button">
+      <!-- buttonList -->
+      <el-button
+        type="primary"
+        size="mini"
+        v-for="item in buttonList"
+        :key="item.label"
+        @click="tabClick(item.label)"
+        :style="{
+          backgroundColor: item.label === clickTab ? '#000E15 !important' : '',
+        }"
+      >
+        {{ item.label }}
+      </el-button>
     </div>
 
-    <div
-      class="right-container animated"
-      :class="{ fadeOutRight: !showPanel, fadeInRight: showPanel }"
-    >
-      <real-info style="height: 41px"></real-info>
-    </div>
+    <!-- 默认内容 -->
+    <template v-if="clickTab == ''">
+      <div
+        class="left-container animated"
+        :class="{ fadeOutLeft: !showPanel, fadeInLeft: showPanel }"
+      >
+        <sq-card height="18%" :title="'基本信息'">
+          <div class="fk-lists">
+            <sq-v-icon-text
+              class="fk"
+              v-for="item in ydDatas"
+              :key="item.id"
+              :title="item.title"
+              :data="item.data"
+            ></sq-v-icon-text>
+          </div>
+        </sq-card>
+
+        <sq-card height="30%" class="sep" :title="'视频监控'"> </sq-card>
+      </div>
+
+      <div
+        class="right-container animated right-home"
+        :class="{ fadeOutRight: !showPanel, fadeInRight: showPanel }"
+      >
+        <real-info style="height: 41px"></real-info>
+
+        <legend-circle
+          :legend="legendData"
+          :iconLegend="iconData"
+          style="margin-top: 4%"
+        ></legend-circle>
+      </div>
+    </template>
+
+    <!-- 干道内容 -->
+    <template v-if="clickTab == '干道'">
+      <div
+        class="left-container animated"
+        :class="{ fadeOutLeft: !showPanel, fadeInLeft: showPanel }"
+      >
+        <sq-card height="30%" :title="'基本信息'">
+          <sq-table :columns="gdcolumns" :tableData="gdtableData"> </sq-table>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'流量'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'交通指数'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+      </div>
+
+      <div
+        class="right-container animated"
+        :class="{ fadeOutRight: !showPanel, fadeInRight: showPanel }"
+      >
+        <sq-card height="30%" :title="'拥堵里程'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'平均速度'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'停车次数'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+      </div>
+    </template>
+
+    <!-- 区域内容 -->
+    <template v-if="clickTab == '区域'">
+      <div
+        class="left-container animated"
+        :class="{ fadeOutLeft: !showPanel, fadeInLeft: showPanel }"
+      >
+        <sq-card height="30%" :title="'基本信息'">
+          <sq-table :columns="qycolumns" :tableData="qytableData"> </sq-table>
+        </sq-card>
+        <sq-card height="18.5%" class="sep" :title="'区域拥堵指数'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="18.5%" class="sep" :title="'区域平均速度'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="18.5%" class="sep" :title="'区域拥堵里程'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+      </div>
+
+      <div
+        class="right-container animated"
+        :class="{ fadeOutRight: !showPanel, fadeInRight: showPanel }"
+      >
+        <sq-card height="30%" :title="'区域驾入流量'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'区域驾出流量'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'区域检测流量'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+      </div>
+    </template>
+
+    <!-- 行政区内容 -->
+    <template v-if="clickTab == '行政区'">
+      <div
+        class="left-container animated"
+        :class="{ fadeOutLeft: !showPanel, fadeInLeft: showPanel }"
+      >
+        <sq-card height="30%" :title="'基本信息'">
+          <sq-table :columns="xzqcolumns" :tableData="xzqtableData"> </sq-table>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'拥堵里程'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'平均速度'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+      </div>
+
+      <div
+        class="right-container animated"
+        :class="{ fadeOutRight: !showPanel, fadeInRight: showPanel }"
+      >
+        <sq-card height="30%" :title="'拥堵里程'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <sq-card height="30%" class="sep" :title="'实时在途车辆数'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card>
+        <!-- <sq-card height="30%" class="sep" :title="'停车次数'">
+          <sq-line
+            :xData="demoLineData.xData"
+            :data="demoLineData.data"
+            :showtl="true"
+          ></sq-line>
+        </sq-card> -->
+      </div>
+    </template>
+
+    <!-- 底部内容 -->
     <div class="bottom-container">
       <i
         v-if="showPanel"
@@ -40,45 +233,35 @@
 
     <div class="left-bg" v-if="showPanel"></div>
     <div class="right-bg" v-if="showPanel"></div>
+
+    <legend-circle
+      v-if="clickTab && clickTab != ''"
+      :legend="legendData"
+      class="legend-position fadeInUp animated"
+      :style="!showPanel ? { right: '10px' } : { right: '650px' }"
+    ></legend-circle>
   </div>
 </template>
 <script>
 import SqCard from "@/components/Card/index.vue";
-import SqTab from "@/components/Tab/index.vue";
-import SqSubTitle from "@/components/sub-title/index.vue";
 import SqVIconText from "@/components/icon-text/vindex.vue";
-import SqIcontextMv from "@/components/icon-text/indexmv.vue";
-import SqSimVindex from "@/components/icon-text/sim-vindex.vue";
-import SqBar from "@/components/Charts/Bar.vue";
-import SqLine from "@/components/Charts/Line.vue";
-import SqPie from "@/components/Charts/Pie.vue";
-import SqTable from "@/components/table/index.vue";
 import RealInfo from "@/components/RealInfo/index.vue";
+import LegendCircle from "@/components/legend-circle/index.vue";
+import SqTable from "@/components/table/index.vue";
+import SqLine from "@/components/Charts/Moreline.vue";
 export default {
   components: {
     SqCard,
-    SqTab,
-    SqSubTitle,
     SqVIconText,
-    SqIcontextMv,
-    SqSimVindex,
-    SqBar,
-    SqLine,
-    SqPie,
-    SqTable,
     RealInfo,
+    LegendCircle,
+    SqTable,
+    SqLine,
   },
   data() {
     return {
-      tabs: [
-        { id: 1, name: "出租车", type: "date" },
-        { id: 2, name: "网约车", type: "month" },
-        // { id: 3, name: '拥堵里程', type: 'year' },
-      ],
-      curtab: "date",
-      datepickerType: "day",
-      chooseDate: "",
-
+      buttonList: [{ label: "干道" }, { label: "区域" }, { label: "行政区" }],
+      clickTab: "",
       ydDatas: [
         {
           id: 1,
@@ -89,96 +272,127 @@ export default {
         { id: 3, title: "行政区数", data: { type: "text", val: 33, dw: "%" } },
       ],
 
-      ydDatas2: [
+      legendData: [
         {
-          id: 1,
-          title: "单程平均通勤耗时",
-          data: { type: "text", val: "980", dw: "分钟" },
+          label: "行政区",
+          color: "#4B7902",
+          check: true,
         },
         {
-          id: 2,
-          title: "45min以内通勤人口比重",
-          data: { type: "text", val: 74, dw: "%" },
+          label: "区域",
+          color: "#F59A23",
+          check: true,
         },
         {
-          id: 3,
-          title: "居民出行延误比",
-          data: { type: "text", val: 33, dw: "%" },
+          label: "干道",
+          color: "#EC808D",
+          check: true,
         },
       ],
 
-      gfData: { type: "text", val: 500, dw: "kW" },
+      iconData: [
+        {
+          label: "公路",
+          icon: "el-icon-loading",
+          check: true,
+        },
+      ],
 
-      cd1: { title: "共享单车投放总量", dw: "件", val: 50 },
-      cd2: { title: "在途数", dw: "人", val: 10 },
-      cd3: { title: "站点数", dw: "人", val: 68 },
-      cd4: { title: "线网总长度", dw: "百万", val: 100 },
-      cd5: { title: "运营里程", dw: "公里", val: 1.0 },
+      gdcolumns: [
+        { name: "序号", prop: "number" },
+        { name: "干道名称", prop: "name" },
+        { name: "干道长度", prop: "length" },
+        { name: "操作", prop: "cz" },
+      ],
+      gdtableData: [
+        { id: 1, number: 1, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 2, number: 2, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 3, number: 3, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 4, number: 4, name: "线路1", length: 10, cz: "查看详情" },
+      ],
 
-      cd11: {
-        type: "text",
-        val: 2527,
-        dw: "tCO2e",
-        up: true,
-        title: "碳减排基准总值",
+      qycolumns: [
+        { name: "序号", prop: "number" },
+        { name: "区域名称", prop: "name" },
+        { name: "区域长度", prop: "length" },
+        { name: "操作", prop: "cz" },
+      ],
+      qytableData: [
+        { id: 1, number: 1, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 2, number: 2, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 3, number: 3, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 4, number: 4, name: "线路1", length: 10, cz: "查看详情" },
+      ],
+
+      xzqcolumns: [
+        { name: "序号", prop: "number" },
+        { name: "行政区名称", prop: "name" },
+        { name: "行政区长度", prop: "length" },
+        { name: "操作", prop: "cz" },
+      ],
+      xzqtableData: [
+        { id: 1, number: 1, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 2, number: 2, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 3, number: 3, name: "线路1", length: 10, cz: "查看详情" },
+        { id: 4, number: 4, name: "线路1", length: 10, cz: "查看详情" },
+      ],
+
+      demoLineData: {
+        xData: [
+          "00:00",
+          "01:00",
+          "02:00",
+          "03:00",
+          "04:00",
+          "05:00",
+          "06:00",
+          "07:00",
+          "08:00",
+          "09:00",
+          "10:00",
+          "11:00",
+          "12:00",
+        ],
+        data: [
+          {
+            name: "当前",
+            data: [
+              120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230,
+            ],
+            color: "#EC808D",
+          },
+          {
+            name: "上周同期",
+            data: [
+              220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330,
+            ],
+            color: "#F59A23",
+          },
+          {
+            name: "上周平均",
+            data: [
+              150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330,
+            ],
+            color: "#4B7902",
+          },
+        ],
       },
-      cd12: {
-        type: "text",
-        val: 2527,
-        dw: "tCO2e",
-        up: true,
-        title: "核定碳减排量",
-      },
-      cd13: {
-        type: "text",
-        val: 2527,
-        dw: "tCO2e",
-        up: true,
-        title: "实际碳排放量",
-      },
-
-      pdata1: [
-        { value: 1048, name: "私家车出行", dw: "辆" },
-        { value: 735, name: "公共交通出行", dw: "辆" },
-        { value: 735, name: "其他", dw: "辆" },
-      ],
-      pdata2: [
-        { value: 1048, name: "本地车", dw: "辆" },
-        { value: 735, name: "本省外地", dw: "辆" },
-        { value: 580, name: "外省", dw: "辆" },
-      ],
-
-      columns: [
-        { name: "排名", prop: "name" },
-        { name: "企业名称", prop: "hc" },
-        { name: "订单数", prop: "zd" },
-        { name: "订单数占比", prop: "cd" },
-      ],
-      tableData: [
-        { id: 1, xh: 1, name: "线路1", hc: 10, zd: 19, cd: 500 },
-        { id: 2, xh: 2, name: "线路1", hc: 10, zd: 19, cd: 500 },
-        { id: 3, xh: 3, name: "线路1", hc: 10, zd: 19, cd: 500 },
-        { id: 4, xh: 4, name: "线路1", hc: 10, zd: 19, cd: 500 },
-      ],
-
-      columns2: [
-        { name: "排名", prop: "name" },
-        { name: "企业名称", prop: "hc" },
-        { name: "订单数", prop: "zd" },
-        { name: "订单数占比", prop: "cd" },
-      ],
-      tableData2: [
-        { id: 1, xh: 1, name: "线路1", hc: 10, zd: 19, cd: 500 },
-        { id: 2, xh: 2, name: "线路1", hc: 10, zd: 19, cd: 500 },
-        { id: 3, xh: 3, name: "线路1", hc: 10, zd: 19, cd: 500 },
-        { id: 4, xh: 4, name: "线路1", hc: 10, zd: 19, cd: 500 },
-      ],
 
       showPanel: true,
     };
   },
-  mounted() {
-    this.curtab = this.tabs[0];
+  mounted() {},
+  methods: {
+    tabClick(tab) {
+      if (this.clickTab == tab) {
+        this.clickTab = "";
+      } else {
+        this.clickTab = false;
+        this.$nextTick(() => {
+          this.clickTab = tab;
+        });
+      }
+    },
   },
 };
 </script>
@@ -248,5 +462,23 @@ export default {
   .card-body {
     height: calc(100% - 30px);
   }
+}
+.right-home {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.bottom-tab-button {
+  position: fixed;
+  left: 50%;
+  bottom: 4%;
+  z-index: 50;
+  transform: translateX(-50%);
+}
+.legend-position {
+  position: fixed;
+  bottom: 8%;
+  z-index: 50;
 }
 </style>

@@ -103,7 +103,8 @@
 
 .el-button + .el-button,
 .el-checkbox.is-bordered + .el-checkbox.is-bordered,
-.el-self-button {
+.el-self-button,
+.el-button {
     background-color: #054071 !important;
     border: 1px solid #00bfff !important;
     color: #fff !important;
